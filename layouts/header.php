@@ -91,12 +91,17 @@
                     <div class="hb-menu">
                         <nav>
                             <ul>
-                                <li><a href="shop-left-sidebar.html">Home</a></li>
+                                <li><a href="<?= BASE_URL ?>">Home</a></li>
                                 <?php foreach ($loai as $l) : ?>
                                     <li><a href="<?= BASE_URL . 'categories?id=' . $l['id_loai'] ?>"><?= $l['ten_loai'] ?></a></li>
                                 <?php endforeach ?>
-                                <li><a href="shop-left-sidebar.html">Contact</a></li>
-
+                                <li><a href="<?= BASE_URL . 'contact' ?>">Liên Hệ</a></li>
+                                <?php if (!isset($_SESSION['auth'])) : ?>
+                                    <li><a href="<?= BASE_URL . 'register' ?>">Đăng Ký</a></li>
+                                    <li><a href="<?= BASE_URL . 'login' ?>">Đăng Nhập</a></li>
+                                <?php else : ?>
+                                    <li><a href="<?= BASE_URL . 'login' ?>"><?=$_SESSION['auth']['name']?></a></li>
+                                <?php endif ?>
                             </ul>
                         </nav>
                     </div>
