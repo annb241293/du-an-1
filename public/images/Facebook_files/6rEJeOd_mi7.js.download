@@ -1,0 +1,4 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["dvgrH"]); }
+
+__d("ProfilePicDisableContextMenu",["Event","Run"],(function(a,b,c,d,e,f){a={_contextMenuEventHandler:null,init:function(a){var c=this;b("Run").onLeave(function(){c._contextMenuEventHandler&&(c._contextMenuEventHandler.remove(),c._contextMenuEventHandler=null)});this._contextMenuEventHandler=b("Event").listen(a,"contextmenu",function(a){a.preventDefault(),a.stopPropagation()})}};e.exports=a}),null);
+__d("FeedProfilePhotoFooter",["SubscriptionsHandler","UFICentralUpdates","URI","destroyOnUnload"],(function(a,b,c,d,e,f){a=function(a,c){"use strict";var d=new(b("SubscriptionsHandler"))();d.addSubscriptions(b("UFICentralUpdates").subscribe("actor-changed",function(d,e){return a.setAttribute("href",new(b("URI"))(c).addQueryData("profile_id",e.actorID).toString())}));b("destroyOnUnload")(function(){return d.release()})};e.exports=a}),null);

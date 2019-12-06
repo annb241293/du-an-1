@@ -1,0 +1,4 @@
+if (self.CavalryLogger) { CavalryLogger.start_js(["cTxbI"]); }
+
+__d("LiveJoinGroupCtaClickFalcoEvent",["FalcoLoggerInternal"],(function(a,b,c,d,e,f){"use strict";a=b("FalcoLoggerInternal").create("live_join_group_cta_click");e.exports=a}),null);
+__d("LiveJoinGroupCtaLogger",["EventListener","LiveJoinGroupCtaClickFalcoEvent"],(function(a,b,c,d,e,f){a={onClickListener:function(a,c,d,e,f){b("EventListener").listen(a,"click",function(){b("LiveJoinGroupCtaClickFalcoEvent").log(function(){return{attachment_id:c,source:d,membership:e,feed_location:f}})})}};e.exports=a}),null);
