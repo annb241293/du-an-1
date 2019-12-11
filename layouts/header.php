@@ -2,6 +2,18 @@
     <?php
     $loai = 'SELECT * FROM loai';
     $loai = executeQuery($loai, true);
+
+    $totalItemOnCart = 0;
+    $totalPrice = 0;
+
+    if (isset($_SESSION['cart'])) {
+        $cart = $_SESSION['cart'];
+        foreach ($cart as $item) {
+            $totalItemOnCart += $item['quantity'];
+            $totalPrice += $item['price'] * $item['quantity'];
+        }
+    }
+
     ?>
 
     <!-- Begin Header Middle Area -->
@@ -20,8 +32,8 @@
                 <!-- Begin Header Middle Right Area -->
                 <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                     <!-- Begin Header Middle Searchbox Area -->
-                    <form action="#" class="hm-searchbox">
-                        <input type="text" placeholder="Enter your search key ...">
+                    <form action="<?=BASE_URL.'search'?>" class="hm-searchbox" method="get">
+                        <input type="text" placeholder="Enter your search key ..." name="keyword">
                         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                     </form>
                     <!-- Header Middle Searchbox Area End Here -->
@@ -40,33 +52,35 @@
                             <li class="hm-minicart">
                                 <div class="hm-minicart-trigger">
                                     <span class="item-icon"></span>
-                                    <span class="item-text">£80.00
-                                        <span class="cart-item-count">2</span>
+                                    <span class="item-text"><?=number_format($totalPrice, 0, '', '.')?> VND
+                                        <span class="cart-item-count"><?= $totalItemOnCart ?></span>
                                     </span>
                                 </div>
                                 <span></span>
                                 <div class="minicart">
                                     <ul class="minicart-product-list">
-                                        <li>
-                                            <a href="single-product.html" class="minicart-product-image">
-                                                <img src="images/product/small-size/5.jpg" alt="cart products">
-                                            </a>
-                                            <div class="minicart-product-details">
-                                                <h6><a href="single-product.html">Aenean eu tristique</a></h6>
-                                                <span>£40 x 1</span>
-                                            </div>
-                                            <button class="close" title="Remove">
-                                                <i class="fa fa-close"></i>
-                                            </button>
-                                        </li>
+                                        <?php foreach ($_SESSION['cart'] as $i) : ?>
+                                            <li>
+                                                <a href="single-product.html" class="minicart-product-image">
+                                                    <img src="images/<?= $i['feature_image'] ?>" alt="cart products">
+                                                </a>
+                                                <div class="minicart-product-details">
+                                                    <h6><a href="single-product.html"><?= $i['name'] ?></a></h6>
+                                                    <span><?= $i['quantity'] . ' x ' . $i['price'] ?></span>
+                                                </div>
+                                                <button class="close" title="Remove">
+                                                   <a href="<?=BASE_URL.'add-to-cart/remove.php?id='.$i['id']?>"> <i class="fa fa-close"></i></a>
+                                                </button>
+                                            </li>
+                                        <?php endforeach ?>
 
                                     </ul>
-                                    <p class="minicart-total">SUBTOTAL: <span>£80.00</span></p>
+                                    <p class="minicart-total">SUBTOTAL: <span><?=number_format($totalPrice, 0, '', '.')?> VND</span></p>
                                     <div class="minicart-button">
-                                        <a href="shopping-cart.html" class="li-button li-button-fullwidth li-button-dark">
+                                        <a href="<?= BASE_URL . 'shopping-cart' ?>" class="li-button li-button-fullwidth li-button-dark">
                                             <span>View Full Cart</span>
                                         </a>
-                                        <a href="checkout.html" class="li-button li-button-fullwidth">
+                                        <a href="<?=BASE_URL.'checkout'?>" class="li-button li-button-fullwidth">
                                             <span>Checkout</span>
                                         </a>
                                     </div>
@@ -100,7 +114,13 @@
                                     <li><a href="<?= BASE_URL . 'register' ?>">Đăng Ký</a></li>
                                     <li><a href="<?= BASE_URL . 'login' ?>">Đăng Nhập</a></li>
                                 <?php else : ?>
-                                    <li><a href="<?= BASE_URL . 'login' ?>"><?=$_SESSION['auth']['name']?></a></li>
+                                    <li class="dropdown-holder"><a href="" style="pointer-events: none"><?= $_SESSION['auth']['name'] ?></a>
+                                        <ul class="hb-dropdown">
+                                            <li><a href="index.html">Profile</a></li>
+                                            <li><a href="<?= BASE_URL . 'logout' ?>">Logout</a></li>
+
+                                        </ul>
+                                    </li>
                                 <?php endif ?>
                             </ul>
                         </nav>

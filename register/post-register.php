@@ -14,8 +14,8 @@ $user = executeQuery($sqlQuery, false);
 
 if (!$user && $passConfirm == $password) {
     $password = password_hash($password, PASSWORD_DEFAULT);
-    $saveQuery = "insert into users (name, email, password) 
-    values ('$name', '$email', '$password')";
+    $saveQuery = "insert into users (name, email, password, role) 
+    values ('$name', '$email', '$password',1)";
     executeQuery($saveQuery, false);
     header("location: ./index.php?alert=Đăng ký thành công");
 } else {

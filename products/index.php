@@ -12,6 +12,9 @@ $category = executeQuery($category);
 $sameProducts = "SELECT * FROM gao WHERE id_loai=$product_cate";
 $sameProducts = executeQuery($sameProducts, true);
 // dd($sameProducts);
+$comments = "SELECT * FROM comment WHERE id_gao=$productId";
+$comments = executeQuery($comments, true);
+
 ?>
 <!doctype html>
 <html class="no-js" lang="zxx">
@@ -46,7 +49,7 @@ $sameProducts = executeQuery($sameProducts, true);
                 <div class="breadcrumb-content">
                     <ul>
                         <li><a href="/">Home</a></li>
-                        <li class="active"><?=$category['ten_loai']?></li>
+                        <li class="active"><?= $category['ten_loai'] ?></li>
                     </ul>
                 </div>
             </div>
@@ -75,15 +78,15 @@ $sameProducts = executeQuery($sameProducts, true);
                     <div class="col-lg-7 col-md-6">
                         <div class="product-details-view-content pt-60">
                             <div class="product-info">
-                                <h2>Today is a good day Framed poster</h2>
-                                <span class="product-details-ref">Reference: demo_15</span>
+                                <h2><?= $product['name_gao'] ?></h2>
+                                <span class="product-details-ref">Reference:</span>
                                 <div class="rating-box pt-20">
                                     <ul class="rating rating-with-review-item">
                                         <li><i class="fa fa-star-o"></i></li>
                                         <li><i class="fa fa-star-o"></i></li>
                                         <li><i class="fa fa-star-o"></i></li>
                                         <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                        <li class="no-star"><i class="fa fa-star-o"></i></li>price_gao
+                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
 
                                     </ul>
                                 </div>
@@ -98,11 +101,12 @@ $sameProducts = executeQuery($sameProducts, true);
                                 </div>
 
                                 <div class="single-add-to-cart">
-                                    <form action="#" class="cart-quantity">
+                                    <form action="<?= BASE_URL . 'add-to-cart' ?>" class="cart-quantity" method="get">
                                         <div class="quantity">
                                             <label>Quantity</label>
                                             <div class="cart-plus-minus">
-                                                <input class="cart-plus-minus-box" value="1" type="text">
+                                                <input type="hidden" name="id" value="<?= $product['id_gao'] ?>">
+                                                <input class="cart-plus-minus-box" value="1" type="text" name="quantity">
                                                 <div class="dec qtybutton"><i class="fa fa-angle-down"></i></div>
                                                 <div class="inc qtybutton"><i class="fa fa-angle-up"></i></div>
                                             </div>
@@ -161,24 +165,12 @@ $sameProducts = executeQuery($sameProducts, true);
                     <div id="reviews" class="tab-pane" role="tabpanel">
                         <div class="product-reviews">
                             <div class="product-details-comment-block">
-                                <div class="comment-review">
-                                    <span>Grade</span>
-                                    <ul class="rating">
-                                        <li><i class="fa fa-star-o"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                        <li><i class="fa fa-star-o"></i></li>
-                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                        <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                    </ul>
-                                </div>
-                                <div class="comment-author-infos pt-25">
-                                    <span>HTML 5</span>
-                                    <em>01-12-18</em>
-                                </div>
+                            <?php foreach($comments as $c):?>
                                 <div class="comment-details">
-                                    <h4 class="title-block">Demo</h4>
-                                    <p>Plaza</p>
+                                    <h4 class="title-block"><?=$c['username']?></h4>
+                                    <p><?=$c['noidung_comment']?></p>
                                 </div>
+                                <?php endforeach?>
                                 <div class="review-btn">
                                     <a class="review-links" href="#" data-toggle="modal" data-target="#mymodal">Write Your Review!</a>
                                 </div>
@@ -191,12 +183,10 @@ $sameProducts = executeQuery($sameProducts, true);
                                                 <div class="modal-inner-area row">
                                                     <div class="col-lg-6">
                                                         <div class="li-review-product">
-                                                            <img src="images/product/large-size/3.jpg" alt="Li's Product">
+                                                            <img src="images/<?=$product['anh']?>" alt="Li's Product">
                                                             <div class="li-review-product-desc">
-                                                                <p class="li-product-name">Today is a good day Framed poster</p>
-                                                                <p>
-                                                                    <span>Beach Camera Exclusive Bundle - Includes Two Samsung Radiant 360 R3 Wi-Fi Bluetooth Speakers. Fill The Entire Room With Exquisite Sound via Ring Radiator Technology. Stream And Control R3 Speakers Wirelessly With Your Smartphone. Sophisticated, Modern Design </span>
-                                                                </p>
+                                                                <p class="li-product-name"><?=$product['name_gao']?></p>
+                                                                
                                                             </div>
                                                         </div>
                                                     </div>
@@ -206,38 +196,22 @@ $sameProducts = executeQuery($sameProducts, true);
                                                             <div class="feedback-area">
                                                                 <div class="feedback">
                                                                     <h3 class="feedback-title">Our Feedback</h3>
-                                                                    <form action="#">
-                                                                        <p class="your-opinion">
-                                                                            <label>Your Rating</label>
-                                                                            <span>
-                                                                                <select class="star-rating">
-                                                                                    <option value="1">1</option>
-                                                                                    <option value="2">2</option>
-                                                                                    <option value="3">3</option>
-                                                                                    <option value="4">4</option>
-                                                                                    <option value="5">5</option>
-                                                                                </select>
-                                                                            </span>
-                                                                        </p>
+                                                                    <form action="<?=BASE_URL.'comments/add-comment.php'?>" method="POST">
+                                                                       <input type="hidden" name="id_gao" value="<?=$product['id_gao']?>">
                                                                         <p class="feedback-form">
                                                                             <label for="feedback">Your Review</label>
-                                                                            <textarea id="feedback" name="comment" cols="45" rows="8" aria-required="true"></textarea>
+                                                                            <textarea id="feedback" name="noidung_comment" cols="45" rows="8" aria-required="true"></textarea>
                                                                         </p>
                                                                         <div class="feedback-input">
                                                                             <p class="feedback-form-author">
                                                                                 <label for="author">Name<span class="required">*</span>
                                                                                 </label>
-                                                                                <input id="author" name="author" value="" size="30" aria-required="true" type="text">
+                                                                                <input id="author" name="username" value="" size="30" aria-required="true" type="text">
                                                                             </p>
-                                                                            <p class="feedback-form-author feedback-form-email">
-                                                                                <label for="email">Email<span class="required">*</span>
-                                                                                </label>
-                                                                                <input id="email" name="email" value="" size="30" aria-required="true" type="text">
-                                                                                <span class="required"><sub>*</sub> Required fields</span>
-                                                                            </p>
+                                                                           
                                                                             <div class="feedback-btn pb-15">
                                                                                 <a href="#" class="close" data-dismiss="modal" aria-label="Close">Close</a>
-                                                                                <a href="#">Submit</a>
+                                                                                <button type="submit">submit</button>
                                                                             </div>
                                                                         </div>
                                                                     </form>
@@ -272,48 +246,48 @@ $sameProducts = executeQuery($sameProducts, true);
                         </div>
                         <div class="row">
                             <div class="product-active owl-carousel">
-                                <?php foreach($sameProducts as $sp): ?>
-                                <div class="col-lg-12">
-                                    <!-- single-product-wrap start -->
-                                    <div class="single-product-wrap">
-                                        <div class="product-image">
-                                            <a href="single-product.html">
-                                                <img src="images/<?=$sp['anh']?>" alt="Li's Product Image">
-                                            </a>
-                                            <span class="sticker">New</span>
-                                        </div>
-                                        <div class="product_desc">
-                                            <div class="product_desc_info">
-                                                <div class="product-review">
-                                                    <h5 class="manufacturer">
-                                                        <a href="product-details.html">Graphic Corner</a>
-                                                    </h5>
-                                                    <div class="rating-box">
-                                                        <ul class="rating">
-                                                            <li><i class="fa fa-star-o"></i></li>
-                                                            <li><i class="fa fa-star-o"></i></li>
-                                                            <li><i class="fa fa-star-o"></i></li>
-                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                            <li class="no-star"><i class="fa fa-star-o"></i></li>
-                                                        </ul>
+                                <?php foreach ($sameProducts as $sp) : ?>
+                                    <div class="col-lg-12">
+                                        <!-- single-product-wrap start -->
+                                        <div class="single-product-wrap">
+                                            <div class="product-image">
+                                                <a href="single-product.html">
+                                                    <img src="images/<?= $sp['anh'] ?>" alt="Li's Product Image">
+                                                </a>
+                                                <span class="sticker">New</span>
+                                            </div>
+                                            <div class="product_desc">
+                                                <div class="product_desc_info">
+                                                    <div class="product-review">
+                                                        <h5 class="manufacturer">
+                                                            <a href="product-details.html">Graphic Corner</a>
+                                                        </h5>
+                                                        <div class="rating-box">
+                                                            <ul class="rating">
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li><i class="fa fa-star-o"></i></li>
+                                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                                <li class="no-star"><i class="fa fa-star-o"></i></li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                    <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
+                                                    <div class="price-box">
+                                                        <span class="new-price">$46.80</span>
                                                     </div>
                                                 </div>
-                                                <h4><a class="product_name" href="single-product.html">Accusantium dolorem1</a></h4>
-                                                <div class="price-box">
-                                                    <span class="new-price">$46.80</span>
+                                                <div class="add-actions">
+                                                    <ul class="add-actions-link">
+                                                        <li class="add-cart active"><a href="#">Add to cart</a></li>
+                                                        <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
+                                                        <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
+                                                    </ul>
                                                 </div>
                                             </div>
-                                            <div class="add-actions">
-                                                <ul class="add-actions-link">
-                                                    <li class="add-cart active"><a href="#">Add to cart</a></li>
-                                                    <li><a href="#" title="quick view" class="quick-view-btn" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-eye"></i></a></li>
-                                                    <li><a class="links-details" href="wishlist.html"><i class="fa fa-heart-o"></i></a></li>
-                                                </ul>
-                                            </div>
                                         </div>
+                                        <!-- single-product-wrap end -->
                                     </div>
-                                    <!-- single-product-wrap end -->
-                                </div>
                                 <?php endforeach ?>
                             </div>
                         </div>

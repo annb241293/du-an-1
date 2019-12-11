@@ -1,99 +1,111 @@
 <?php
-require_once '../../helpers/common.php';
-require_once '../../helpers/db.php';
-
-if ($_SESSION['auth'] == null) {
-    header('location: ../login/');
-}
-
-?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <base href="<?= ADM_ASSET_URL ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PT14111 | Thêm mới danh mục</title>
-    <?php include_once "../layouts/style.php" ?>
-    <style>
-        .box {
-            padding-bottom: 20px;
+require_once('../../helpers/db.php');
+require_once('../../helpers/const.php');
+     if (isset($_POST['btn_them'])) {
+        $name_gao=$_POST['name_gao'];
+        $price_gao=$_POST['price_gao'];
+        $content_gao=$_POST['content_gao'];
+        $tieude_gao=$_POST['tieude_gao'];
+        $nha_cung_cap=$_POST['nha_cung_cap'];
+        $thuonghieu=$_POST['thuonghieu'];
+        extract($_REQUEST);
+        //Validate giá
+        if($name_gao=="" || $price_gao=="" || $content_gao==""|| $content_gao=="" || $tieude_gao=="" || $nha_cung_cap=="" || $thuonghieu==""){
+            echo "bạn cần phải nhập đủ thông tin";
         }
-    </style>
+
+        elseif ( $price_gao=="" || $price_gao < 0 ) {
+            echo  "Giá phải là số dương<br>";
+        }
+        //Validate ảnh
+       $img = ["image/jpeg", "image/jpg", "image/png"];
+        elseif ( $_FILES['anh']['size'] >= 2000000 || in_array($_FILES['anh']['type'], $img) == false ) {
+            echo "File phải là ảnh nhỏ hơn 2MB";
+        }else {
+            $image = $_FILES['anh']['name'];
+            move_uploaded_file($_FILES['anh']['tmp_name']. $image);
+        }
+        //Làm việc thêm mới
+            $sql="INSERT INTO gao(name_gao, price_gao, anh, content_gao, tieude_gao, nha_cung_cap,thuonghieu,id_loai) Values('$name_gao', '$price_gao', '$image', '$content_gao', '$tieude_gao', '$nha_cung_cap','$thuonghieu','$id_loai')";
+       $conn=getConnect();
+          $stmt = $conn->prepare($sql);
+          $stmt->execute();
+          if($stmt->rowCount()>0){
+             header("location:http://localhost/du-an-1-master/admin/products");
+          }
+          else{
+            echo "không thể cập nhật";
+          }
+        }
+?>
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <base href="<?php echo ASSET_URL ?>">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>admin1</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+
+    <?php require_once('../layouts/style.php'); ?>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
-    <!-- Site wrapper -->
-    <div class="wrapper">
-        <!-- Header -->
-        <?php include_once "../layouts/header.php" ?>
-
-        <!-- =============================================== -->
-
-        <!-- Left side column. contains the sidebar -->
-        <!-- Sidebar -->
-        <?php include_once "../layouts/sidebar.php" ?>
-
-        <!-- =============================================== -->
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-
-            <!-- Main content -->
-            <section class="content">
-
-                <div class="box row">
-                    <div class="col-md-6">
-                        <form action="<?= ADMIN_URL . 'products/save-add.php' ?>" method="post" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label for="">Name</label>
-                                <input type="text" name="name" placeholder="Nhập tên danh mục" class="form-control">
-                                <?php if (isset($_GET['nameerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['nameerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Image</label>
-                                <input type="file" name="image" class="form-control">
-                                <?php if (isset($_GET['imgerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['imgerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="">short desc</label>
-                                <textarea name="short_desc" rows="10" class="form-control"></textarea>
-                                <?php if (isset($_GET['short_descerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['short_descerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-sm btn-primary">Lưu</button>
-                                <a href="<?= ADMIN_URL . "products" ?>" class="btn btn-sm btn-danger">Hủy</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /.content -->
-        </div>
-        <!-- /.content-wrapper -->
-
-        <!-- Footer -->
-        <?php include_once "../layouts/footer.php" ?>
-        <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
+<body>
+   
+    <div class="body-wrapper">
+        <?php require_once('../layouts/header.php'); ?>
+         <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id_gao" id="">
+        <table>
+            <tr>
+                <td>Tên Gạo</td>
+                <td><input type="text" name="name_gao" id=""></td>
+            </tr>
+            <tr>
+                <td>Giá</td>
+                <td><input type="number" name="price_gao"  id=""></td>
+            </tr>
+            <tr>
+                <td>Hình</td>
+                <td>
+                    <input type="file" name="anh" id="">
+                </td>
+            </tr>
+            <tr>
+                <td>Mô tả</td>
+                <td><textarea name="content_gao" id="" cols="50" rows="5"></textarea></td>
+            </tr>
+            <tr>
+                <td>Tiêu đề gạo</td>
+                <td><textarea name="tieude_gao" id="" cols="50" rows="5"></textarea></td>
+            </tr>
+            <tr>
+                <td>Thương hiệu</td>
+                <td><input type="text" name="thuonghieu" ></input></td>
+            </tr>
+             <tr>
+                <td>Nhà cung cấp</td>
+                <td><input type="text" name="nha_cung_cap" ></input></td>
+            </tr>
+            <tr>
+                <td>Loại gạo</td>
+                <td><input type="text" name="id_loai"></td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <input type="submit" value="Thêm gạo" name="btn_them">
+                </td>
+                
+            </tr>
+        </table>
+    </form>
+        <?php require_once('../layouts/footer.php'); ?>
     </div>
-    <!-- ./wrapper -->
-
-    <?php include_once "../layouts/script.php" ?>
-    <script>
-
-
-    </script>
+    <?php require_once('../layouts/script.php'); ?>
 </body>
+
 
 </html>

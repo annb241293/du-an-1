@@ -1,120 +1,78 @@
 <?php
-require_once '../../helpers/common.php';
-require_once '../../helpers/db.php';
-
-if($_SESSION['auth'] == null){
-    header('location: ../login/');
-}
-$userId = $_GET['id'];
-
-$sqlQuery = "select * from users where id = $userId";
-$user = executeQuery($sqlQuery, false);
-if (!$user) {
-    header('location: ./');
-    die;
-}
-
-?>
-<!DOCTYPE html>
-<html>
-
-<head>
-    <meta charset="utf-8">
-    <base href="<?= ADM_ASSET_URL ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>PT14111 | Thêm mới danh mục</title>
-    <?php include_once "../layouts/style.php" ?>
-    <style>
-        .box {
-            padding-bottom: 20px;
+require_once('../../helpers/db.php');
+require_once('../../helpers/const.php');
+$id_user=$_GET['id_user'];
+$user=executeQuery("SELECT*FROM users WHERE id_user='$id_user'");
+if (isset($_POST['btn_them'])) {
+        extract($_REQUEST);
+        $id_user=$_POST['id_user'];
+        $password=$_POST['password'];
+        $email=$_POST['email'];
+        $username=$_POST['username'];
+        if($password==""|| $email=="" || $username==""){
+            echo "bạn phải nhập đầy đủ thông tin";
         }
-    </style>
+        else{
+        $sql="UPDATE users SET password='$password',name='$username',email='$email' WHERE id_user='$id_user'";
+            $conn=getConnect();
+          $stmt = $conn->prepare($sql);
+          $stmt->execute();
+          if($stmt->rowCount()>0){
+             header('Location: ../' );
+          }
+          else{
+            echo "không thể cập nhật";
+          }    
+      }
+  }
+?>
+<!doctype html>
+<html class="no-js" lang="zxx">
+<head>
+    <base href="<?php echo ASSET_URL ?>">
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>admin1</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="images/favicon.png">
+
+    <?php require_once('../layouts/style.php'); ?>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">
-    <!-- Site wrapper -->
-    <div class="wrapper">
-        <!-- Header -->
-        <?php include_once "../layouts/header.php" ?>
-
-        <!-- =============================================== -->
-
-        <!-- Left side column. contains the sidebar -->
-        <!-- Sidebar -->
-        <?php include_once "../layouts/sidebar.php" ?>
-
-        <!-- =============================================== -->
-
-        <!-- Content Wrapper. Contains page content -->
-        <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
-
-            <!-- Main content -->
-            <section class="content">
-
-                <div class="box row">
-                    <div class="col-md-6">
-                        <form action="<?= ADMIN_URL . 'users/save-edit.php' ?>" method="post" enctype="multipart/form-data">
-                            <input type="hidden" name="id" value="<?= $user['id'] ?>">
-                            <div class="form-group">
-                                <label for="">Name</label>
-                                <input type="text" name="name" value="<?= $user['name'] ?>" class="form-control">
-                                <?php if (isset($_GET['nameerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['nameerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Email</label>
-                                <input type="text" name="email" value="<?= $user['email'] ?>" class="form-control">
-                                <?php if (isset($_GET['nameerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['nameerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Address</label>
-                                <input type="text" name="address" value="<?= $user['address'] ?>" class="form-control">
-                                <?php if (isset($_GET['nameerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['nameerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="form-group">
-                                <label for="">Ảnh</label>
-                                <input type="file" name="avatar" class="form-control">
-                                <?php if (isset($_GET['imgerr'])) : ?>
-                                    <span class="text-danger"><?= $_GET['imgerr'] ?></span>
-                                <?php endif ?>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-6 col-md-offset-3">
-                                    <img src="<?= ASSET_URL . $user['avatar'] ?>" alt="" class="img-responsive">
-                                </div>
-                            </div>
-                            <div class="text-center">
-                                <button type="submit" class="btn btn-sm btn-primary">Lưu</button>
-                                <a href="<?= ADMIN_URL . "users" ?>" class="btn btn-sm btn-danger">Hủy</a>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-
-            </section>
-            <!-- /.content -->
+<body>
+   
+    <div class="body-wrapper">
+        <?php require_once('../layouts/header.php'); ?>
+        <div>
+             <form action="" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id_user" value="<?=$user['id_user']?>" id="">
+        <table>
+            <tr>
+                <td>Tên Tài khoản</td>
+                <td><input type="text" name="username" value="<?=$user['name']?>" id=""></td>
+            </tr>
+            <tr>
+                <td>Mật khẩu</td>
+                <td><input type="pass" name="password" value="<?=$user['password']?>" id=""></td>
+            </tr>
+             <tr>
+                <td>email</td>
+                <td><input type="email" name="email" value="<?=$user['email']?>" id=""></td>
+            </tr>
+           <tr>
+                <td colspan="2">
+                    <input type="submit" value="sửa" name="btn_them">
+                </td>
+            </tr>
+        </table>
+    </form>
         </div>
-        <!-- /.content-wrapper -->
-
-        <!-- Footer -->
-        <?php include_once "../layouts/footer.php" ?>
-        <!-- Add the sidebar's background. This div must be placed
-       immediately after the control sidebar -->
-        <div class="control-sidebar-bg"></div>
+        <?php require_once('../layouts/footer.php'); ?>
     </div>
-    <!-- ./wrapper -->
-
-    <?php include_once "../layouts/script.php" ?>
-    <script>
-
-
-    </script>
+    <?php require_once('../layouts/script.php'); ?>
 </body>
+
 
 </html>

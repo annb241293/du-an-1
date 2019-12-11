@@ -5,8 +5,6 @@ require_once('../helpers/const.php');
 <!doctype html>
 <html class="no-js" lang="zxx">
 
-<!-- login-register31:27-->
-
 <head>
     <base href="<?= ASSET_URL ?>">
     <meta charset="utf-8">

@@ -1,25 +1,12 @@
 <?php
-require_once '../../helpers/common.php';
 require_once '../../helpers/db.php';
-session_start();
+$id_gao = $_GET['id_gao'];
+$sqlQuery = "select * from gao where id_gao = $id_gao";
+$products = executeQuery($sqlQuery, false);
 
-if($_SESSION['auth'] == null){
-    header('location: ../../login/cp-login.php');
-}
-
-$productId = $_GET['id'];
-
-// kiem tra xem id san pham co ton tai that hay khong
-$sqlQuery = "select * from products where id = $productId";
-$product = executeQuery($sqlQuery, false);
-
-if($product){
-    $sqlRemoveProducts = "delete from products where id = $productId";
+if ($products) {
+    $sqlRemoveProducts = "delete from gao where id_gao = $id_gao";
     executeQuery($sqlRemoveProducts, false);
 }
 
 header("location: ../products");
-
-
-
-?>
