@@ -107,7 +107,7 @@ $gao_moi = executeQuery($gao_moi, true);
                                                 <a href="<?= BASE_URL . 'products?id=' . $gnd['id_gao'] ?>">
                                                     <img src="images/<?= $gnd['anh'] ?>" style="height: 200px">
                                                 </a>
-                                                <span class="sticker">New</span>
+                                             
                                             </div>
                                             <div class="product_desc">
                                                 <div class="product_desc_info">
@@ -157,10 +157,10 @@ $gao_moi = executeQuery($gao_moi, true);
                                         <!-- single-product-wrap start -->
                                         <div class="single-product-wrap">
                                             <div class="product-image">
-                                                <a href="single-product.html">
+                                                <a href="<?= BASE_URL . 'products?id=' . $gbc['id_gao'] ?>">
                                                     <img src="images/<?= $gbc['anh'] ?>" alt="Li's Product Image" style="height: 200px">
                                                 </a>
-                                                <span class="sticker">New</span>
+                                             
                                             </div>
                                             <div class="product_desc">
                                                 <div class="product_desc_info">
@@ -214,7 +214,7 @@ $gao_moi = executeQuery($gao_moi, true);
                                             <!-- single-product-wrap start -->
                                             <div class="single-product-wrap">
                                                 <div class="product-image">
-                                                    <a href="single-product.html">
+                                                    <a href="<?= BASE_URL . 'products?id=' . $gm['id_gao'] ?>">
                                                         <img src="images/<?=$gm['anh']?>" alt="Li's Product Image" style="height: 200px">
                                                     </a>
                                                     <span class="sticker">New</span>

@@ -9,14 +9,15 @@ $sqlQuery = "select * from users where email = '$email'";
 $user = executeQuery($sqlQuery, false);
 
 if(!$user || !(password_verify($password,$user['password']))){
-    header('location: ./index.php?alert=Sai thông tin tài khoản');
+    header('Location: ' . $_SERVER['HTTP_REFERER'].'?alert=Sai thông tin tài khoản');
     die;
 }
 
 $_SESSION['auth'] = $user;
-if($user['role'] == 1){
-    header('location: ../');
+if($user['role'] == 0){
+    header('location: ../admin');
     die;
 }
 
-header('location: ../admin');
+header('Location: ' . $_SERVER['HTTP_REFERER']);
+

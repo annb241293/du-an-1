@@ -12,6 +12,8 @@
             $totalItemOnCart += $item['quantity'];
             $totalPrice += $item['price'] * $item['quantity'];
         }
+    } else {
+        $_SESSION['cart'] = [];
     }
 
     ?>
@@ -23,7 +25,7 @@
                 <!-- Begin Header Logo Area -->
                 <div class="col-lg-3">
                     <div class="logo pb-sm-30 pb-xs-30">
-                        <a href="index.html">
+                        <a href="<?=BASE_URL?>">
                             <img src="images/menu/logo/1.jpg" alt="">
                         </a>
                     </div>
@@ -32,7 +34,7 @@
                 <!-- Begin Header Middle Right Area -->
                 <div class="col-lg-9 pl-0 ml-sm-15 ml-xs-15">
                     <!-- Begin Header Middle Searchbox Area -->
-                    <form action="<?=BASE_URL.'search'?>" class="hm-searchbox" method="get">
+                    <form action="<?= BASE_URL . 'search' ?>" class="hm-searchbox" method="get">
                         <input type="text" placeholder="Enter your search key ..." name="keyword">
                         <button class="li-btn" type="submit"><i class="fa fa-search"></i></button>
                     </form>
@@ -52,7 +54,7 @@
                             <li class="hm-minicart">
                                 <div class="hm-minicart-trigger">
                                     <span class="item-icon"></span>
-                                    <span class="item-text"><?=number_format($totalPrice, 0, '', '.')?> VND
+                                    <span class="item-text"><?= number_format($totalPrice, 0, '', '.') ?> VND
                                         <span class="cart-item-count"><?= $totalItemOnCart ?></span>
                                     </span>
                                 </div>
@@ -69,18 +71,18 @@
                                                     <span><?= $i['quantity'] . ' x ' . $i['price'] ?></span>
                                                 </div>
                                                 <button class="close" title="Remove">
-                                                   <a href="<?=BASE_URL.'add-to-cart/remove.php?id='.$i['id']?>"> <i class="fa fa-close"></i></a>
+                                                    <a href="<?= BASE_URL . 'add-to-cart/remove.php?id=' . $i['id'] ?>"> <i class="fa fa-close"></i></a>
                                                 </button>
                                             </li>
                                         <?php endforeach ?>
 
                                     </ul>
-                                    <p class="minicart-total">SUBTOTAL: <span><?=number_format($totalPrice, 0, '', '.')?> VND</span></p>
+                                    <p class="minicart-total">SUBTOTAL: <span><?= number_format($totalPrice, 0, '', '.') ?> VND</span></p>
                                     <div class="minicart-button">
                                         <a href="<?= BASE_URL . 'shopping-cart' ?>" class="li-button li-button-fullwidth li-button-dark">
                                             <span>View Full Cart</span>
                                         </a>
-                                        <a href="<?=BASE_URL.'checkout'?>" class="li-button li-button-fullwidth">
+                                        <a href="<?= BASE_URL . 'checkout' ?>" class="li-button li-button-fullwidth">
                                             <span>Checkout</span>
                                         </a>
                                     </div>
